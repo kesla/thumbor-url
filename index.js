@@ -6,9 +6,13 @@ var halignRegexp = /(left|right|center)\//;
 var valignRegexp = /(top|bottom|middle)\//;
 var keywordsRegexp = /meta\/|smart\/|fit-in\//g;
 var filtersRegexp = /filters:(.+)\//;
+var trimRegexp = /trim(:([^\d]+))?(:(\d+))?\//;
 
 module.exports.parseDecrypted = function (url) {
   if (url[0] === '/') url = url.slice(1);
+
+  var trim = url.match(trimRegexp);
+  if (trim && trim[0]) url = url.replace(trim[0], '');
 
   var crop = url.match(cropRegexp);
   if (crop && crop[0]) url = url.replace(crop[0], '');
@@ -47,6 +51,10 @@ module.exports.parseDecrypted = function (url) {
     valign: (valign && valign[1]) || 'top',
     smart: smart,
     fitIn: fitIn,
-    filters: (filters && filters[1]) || null
+    filters: (filters && filters[1]) || null,
+    trim: {
+      orientation: (trim && (trim[2] || 'top-left')) || null,
+      tolerance: (trim && parseInt(trim[4], 10)) || 0
+    }
   };
 };

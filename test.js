@@ -97,3 +97,27 @@ test('with halign / valign', function(t) {
   t.equal(url.parseDecrypted('/middle/').valign, 'middle');
   t.end();  
 });
+
+test('trim', function(t) {
+  t.deepEqual(url.parseDecrypted('/trim/').trim, {
+    orientation: 'top-left',
+    tolerance: 0
+  });
+  t.deepEqual(url.parseDecrypted('/trim:top-left/').trim, {
+    orientation: 'top-left',
+    tolerance: 0
+  });
+  t.deepEqual(url.parseDecrypted('/trim:bottom-right/').trim, {
+    orientation: 'bottom-right',
+    tolerance: 0
+  });
+  t.deepEqual(url.parseDecrypted('/trim:123/').trim, {
+    orientation: 'top-left',
+    tolerance: 123
+  });
+  t.deepEqual(url.parseDecrypted('/trim:top-left:123/').trim, {
+    orientation: 'top-left',
+    tolerance: 123
+  });
+  t.end();
+});
