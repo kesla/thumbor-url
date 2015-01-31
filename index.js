@@ -1,14 +1,33 @@
 'use strict';
 
-var cropRegexp = /(\d+)x(\d+):(\d+)x(\d+)\//;
-var sizeRegexp = /(\-?)(\d*)x(\-?)(\d*)\//;
-var halignRegexp = /(left|right|center)\//;
-var valignRegexp = /(top|bottom|middle)\//;
-var keywordsRegexp = /meta\/|smart\/|fit-in\//g;
-var filtersRegexp = /filters:(.+)\//;
-var trimRegexp = /trim(:([^\d]+))?(:(\d+))?\//;
+var regexp = new RegExp([
+  '/?',
+  // unsafe
+  '(unsafe/)?',
+  // meta
+  '(meta/)?',
+  // trim
+  '(trim(:([^\\d]+))?(:(\\d+))?/)?',
+  // crop
+  '((\\d+)x(\\d+):(\\d+)x(\\d+)/)?',
+  // fit-in
+  '(fit-in/)?',
+  // dimensions
+  '((\\-?)(\\d*)x(\\-?)(\\d*)/)?',
+  // halign
+  '((left|right|center)/)?',
+  // valign
+  '((top|bottom|middle)/)?',
+  // smart
+  '(smart/)?',
+  // TODO:
+  // filters
 
-module.exports.parseDecrypted = function (url) {
+  // image
+  '(\.+)?'
+].join(''));
+
+module.exports.parseDecrypted = function(url) {
   var results = {
     image: '',
     crop: {
@@ -31,58 +50,69 @@ module.exports.parseDecrypted = function (url) {
       orientation: null,
       tolerance: null
     },
+    unsafe: true
   };
-  if (url[0] === '/') url = url.slice(1);
 
-  var trim = url.match(trimRegexp);
-  if (trim) {
-    results.trim.orientation = trim[2] || 'top-left';
-    results.trim.tolerance = trim[4] && parseInt(trim[4], 10) || 0;
-    url.replace(trim[0], '');
+  var match = url.match(regexp)
+  var index = 1;
+
+  if (match[index]) {
+    results.unsafe = true;
   }
+  index++;
 
-  var crop = url.match(cropRegexp);
-  if (crop) {
-    results.crop.left = parseInt(crop[1], 10);
-    results.crop.top = parseInt(crop[2], 10);
-    results.crop.right = parseInt(crop[3], 10);
-    results.crop.bottom = parseInt(crop[4], 10);
-    url = url.replace(crop[0], '');
+  if (match[index]) {
+    results.meta = true;
   }
+  index++;
 
-  var size = url.match(sizeRegexp);
-  if (size) {
-    results.horizontalFlip = !!size[1];
-    if (size[2]) results.width = Math.abs(parseInt(size[2], 10));
-    results.verticalFlip = !!size[3];
-    if (size[4]) results.height = Math.abs(parseInt(size[4], 10));
-    url = url.replace(size[0], '');
+  if (match[index]) {
+    results.trim.orientation = match[index + 2] || 'top-left';
+    results.trim.tolerance = match[index + 4] && parseInt(match[index + 4], 10) || 0;
   }
+  index = index + 5;
 
-  var halign = url.match(halignRegexp);
-  if (halign && halign[0]) {
-    results.halign = halign[1];
-    url = url.replace(halign[0], '');
+  if (match[index]) {
+    results.crop.left = parseInt(match[index + 1], 10);
+    results.crop.top = parseInt(match[index + 2], 10);
+    results.crop.right = parseInt(match[index + 3], 10);
+    results.crop.bottom = parseInt(match[index + 4], 10);
   }
+  index = index + 5;
 
-  var valign = url.match(valignRegexp);
-  if (valign && valign[0]) {
-    results.valign = valign[1];
-    url = url.replace(valign[0], '');
+  if (match[index]) {
+    results.fitIn = true;
   }
+  index++;
 
-  results.meta = url.indexOf('meta/') !== -1;
-  results.smart = url.indexOf('smart/') !== -1;
-  results.fitIn = url.indexOf('fit-in/') !== -1;
-  url = url.replace(keywordsRegexp, '');
-
-  var filters = url.match(filtersRegexp);
-  if (filters) {
-    results.filters = filters[1];
-    url = url.replace(filters[0], '');
+  if (match[index]) {
+    results.horizontalFlip = !!match[index + 1];
+    if (match[index + 2]) {
+      results.width = Math.abs(parseInt(match[index + 2], 10));
+    }
+    results.verticalFlip = !!match[index + 3];
+    if (match[index + 4]) {
+      results.height = Math.abs(parseInt(match[index + 4], 10));
+    }
   }
+  index = index + 5;
 
-  results.image = url;
+  if (match[index]) {
+    results.halign = match[index + 1];
+  }
+  index = index + 2;
+
+  if (match[index]) {
+    results.valign = match[index + 1];
+  }
+  index = index + 2;
+
+  if (match[index]) {
+    results.smart = true;
+  }
+  index++;
+
+  results.image = match[index];
 
   return results;
 };

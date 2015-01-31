@@ -14,20 +14,20 @@ test('without result', function(t) {
 test('without image', function(t) {
   var object = url.parseDecrypted('/meta/10x11:12x13/fit-in/-300x-200/left/top/smart/filters:some_filter()/img');
 
-  t.ok(object.meta);
-  t.equal(object.crop.left, 10);
-  t.equal(object.crop.top, 11);
-  t.equal(object.crop.right, 12);
-  t.equal(object.crop.bottom, 13);
-  t.equal(object.width, 300);
-  t.equal(object.height, 200);
-  t.ok(object.horizontalFlip);
-  t.ok(object.verticalFlip);
-  t.equal(object.halign, 'left');
-  t.equal(object.valign, 'top');
-  t.ok(object.smart);
-  t.ok(object.fitIn);
-  t.equal(object.filters, 'some_filter()');
+  t.ok(object.meta, 'meta');
+  t.equal(object.crop.left, 10, 'crop.left');
+  t.equal(object.crop.top, 11, 'crop.top');
+  t.equal(object.crop.right, 12, 'crop.right');
+  t.equal(object.crop.bottom, 13, 'crop.bottom');
+  t.equal(object.width, 300, 'width');
+  t.equal(object.height, 200, 'height');
+  t.ok(object.horizontalFlip, 'horizontalFlip');
+  t.ok(object.verticalFlip, 'verticalFlip');
+  t.equal(object.halign, 'left', 'halign');
+  t.equal(object.valign, 'top', 'valign');
+  t.ok(object.smart, 'smart');
+  t.ok(object.fitIn, 'fitInt');
+  t.equal(object.filters, 'some_filter()', 'filters');
   t.end();
 });
 
@@ -95,7 +95,7 @@ test('with halign / valign', function(t) {
   t.equal(url.parseDecrypted('/top/').valign, 'top');
   t.equal(url.parseDecrypted('/bottom/').valign, 'bottom');
   t.equal(url.parseDecrypted('/middle/').valign, 'middle');
-  t.end();  
+  t.end();
 });
 
 test('trim', function(t) {
