@@ -21,8 +21,8 @@ test('without image', function(t) {
   t.equal(object.crop.bottom, 13);
   t.equal(object.width, 300);
   t.equal(object.height, 200);
-  t.ok(object.horizontal_flip);
-  t.ok(object.vertical_flip);
+  t.ok(object.horizontalFlip);
+  t.ok(object.verticalFlip);
   t.equal(object.halign, 'left');
   t.equal(object.valign, 'top');
   t.ok(object.smart);
