@@ -119,5 +119,9 @@ test('trim', function(t) {
     orientation: 'top-left',
     tolerance: 123
   });
+  t.deepEqual(url.parseDecrypted('/').trim, {
+    orientation: null,
+    tolerance: null
+  });
   t.end();
 });

@@ -54,7 +54,7 @@ module.exports.parseDecrypted = function (url) {
     filters: (filters && filters[1]) || null,
     trim: {
       orientation: (trim && (trim[2] || 'top-left')) || null,
-      tolerance: (trim && parseInt(trim[4], 10)) || 0
+      tolerance: trim ? parseInt(trim[4], 10) || 0 : null
     }
   };
 };
