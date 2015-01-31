@@ -85,3 +85,15 @@ test('with only width / height dimensions', function(t) {
   t.equal(url.parseDecrypted('/x100/').width, null);
   t.end();
 });
+
+test('with halign / valign', function(t) {
+  t.equal(url.parseDecrypted('//').halign, 'left');
+  t.equal(url.parseDecrypted('/left/').halign, 'left');
+  t.equal(url.parseDecrypted('/right/').halign, 'right');
+  t.equal(url.parseDecrypted('/center/').halign, 'center');
+  t.equal(url.parseDecrypted('//').valign, 'top');
+  t.equal(url.parseDecrypted('/top/').valign, 'top');
+  t.equal(url.parseDecrypted('/bottom/').valign, 'bottom');
+  t.equal(url.parseDecrypted('/middle/').valign, 'middle');
+  t.end();
+});
