@@ -1,0 +1,22 @@
+{
+  "name": "thumbor-url",
+  "version": "0.0.0",
+  "description": "parse & stringify thumbo urls",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kesla/thumbor-url"
+  },
+  "author": "David Björklund <david.bjorklund@gmail.com> (http://davidbjorklund.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kesla/thumbor-url/issues"
+  },
+  "homepage": "https://github.com/kesla/thumbor-url",
+  "devDependencies": {
+    "tape": "^3.5.0"
+  }
+}
