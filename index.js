@@ -4,6 +4,7 @@ var cropRegexp = /(\d+)x(\d+):(\d+)x(\d+)\//;
 var sizeRegexp = /(\-?)(\d*)x(\-?)(\d*)\//;
 var halignRegexp = /(left|right|center)\//;
 var valignRegexp = /(top|bottom|middle)\//;
+var keywordsRegexp = /meta\/|smart\/fit-it\//g;
 
 module.exports.parseDecrypted = function (url) {
   var crop = url.match(cropRegexp);
@@ -14,6 +15,11 @@ module.exports.parseDecrypted = function (url) {
   if (halign && halign[0]) url = url.replace(halign[0], '');
   var valign = url.match(valignRegexp);
   if (valign && valign[0]) url = url.replace(valign[0], '');
+  var meta = url.indexOf('meta/') !== -1;
+  var smart = url.indexOf('smart/') !== -1;
+  var fitIn = url.indexOf('fit-in/') !== -1;
+
+  url = url.replace(keywordsRegexp, '');
 
   return {
     image: url,
@@ -25,10 +31,12 @@ module.exports.parseDecrypted = function (url) {
     },
     width: (size && size[2] && Math.abs(parseInt(size[2], 10))) || null,
     height: (size && size[4] && Math.abs(parseInt(size[4], 10))) || null,
-    meta: url.indexOf('meta') !== -1,
+    meta: meta,
     horizontalFlip: size && (size[1] === '-'),
     verticalFlip: size && (size[3] === '-'),
     halign: (halign && halign[1]) || 'left',
-    valign: (valign && valign[1]) || 'top'
+    valign: (valign && valign[1]) || 'top',
+    smart: smart,
+    fitIn: fitIn
   };
 };

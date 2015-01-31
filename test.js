@@ -26,7 +26,7 @@ test('without image', function(t) {
   t.equal(object.halign, 'left');
   t.equal(object.valign, 'top');
   t.ok(object.smart);
-  t.ok(object.fit_in);
+  t.ok(object.fitIn);
   t.equal(object.filters, 'some_filter()');
   t.end();
 });
@@ -95,5 +95,5 @@ test('with halign / valign', function(t) {
   t.equal(url.parseDecrypted('/top/').valign, 'top');
   t.equal(url.parseDecrypted('/bottom/').valign, 'bottom');
   t.equal(url.parseDecrypted('/middle/').valign, 'middle');
-  t.end();
+  t.end();  
 });
