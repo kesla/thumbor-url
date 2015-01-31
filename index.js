@@ -53,7 +53,7 @@ module.exports.parseDecrypted = function(url) {
     unsafe: true
   };
 
-  var match = url.match(regexp)
+  var match = url.match(regexp);
   var index = 1;
 
   if (match[index]) {

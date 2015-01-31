@@ -32,7 +32,7 @@ test('without image', function(t) {
 });
 
 test('with image', function(t) {
-  var imageUrl = 's.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg'
+  var imageUrl = 's.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg';
   var object = url.parseDecrypted('/meta/10x11:12x13/-300x-200/left/top/smart/' + imageUrl);
 
   t.equal(object.image, imageUrl);
