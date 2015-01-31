@@ -1,7 +1,7 @@
 {
   "name": "thumbor-url",
   "version": "0.0.0",
-  "description": "parse & stringify thumbo urls",
+  "description": "parse thumbor urls",
   "main": "index.js",
   "scripts": {
     "test": "tape test.js"
