@@ -77,3 +77,11 @@ test('with thumbor of thumbor with Filters', function(t) {
   t.equal(object.height, 100);
   t.end();
 });
+
+test('with only width / height dimensions', function(t) {
+  t.equal(url.parseDecrypted('/100x/').height, null);
+  t.equal(url.parseDecrypted('/100x/').width, 100);
+  t.equal(url.parseDecrypted('/x100/').height, 100);
+  t.equal(url.parseDecrypted('/x100/').width, null);
+  t.end();
+});
