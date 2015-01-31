@@ -8,6 +8,8 @@ var keywordsRegexp = /meta\/|smart\/|fit-in\//g;
 var filtersRegexp = /filters:(.+)\//;
 
 module.exports.parseDecrypted = function (url) {
+  if (url[0] === '/') url = url.slice(1);
+
   var crop = url.match(cropRegexp);
   if (crop && crop[0]) url = url.replace(crop[0], '');
 
