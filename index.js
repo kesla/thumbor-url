@@ -16,6 +16,7 @@ module.exports.parseDecrypted = function (url) {
       bottom: crop ? parseInt(crop[4], 10) : null
     },
     width: size ? parseInt(size[1], 10) : null,
-    height: size ? parseInt(size[2], 10) : null
+    height: size ? parseInt(size[2], 10) : null,
+    meta: url.indexOf('meta') !== -1
   };
 };
