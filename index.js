@@ -9,52 +9,80 @@ var filtersRegexp = /filters:(.+)\//;
 var trimRegexp = /trim(:([^\d]+))?(:(\d+))?\//;
 
 module.exports.parseDecrypted = function (url) {
+  var results = {
+    image: '',
+    crop: {
+      left: null,
+      top: null,
+      right: null,
+      bottom: null
+    },
+    width: null,
+    height: null,
+    meta: false,
+    horizontalFlip: false,
+    verticalFlip: false,
+    halign: 'left',
+    valign: 'top',
+    smart: false,
+    fitIn: false,
+    filters: null,
+    trim: {
+      orientation: null,
+      tolerance: null
+    },
+  };
   if (url[0] === '/') url = url.slice(1);
 
   var trim = url.match(trimRegexp);
-  if (trim && trim[0]) url = url.replace(trim[0], '');
+  if (trim) {
+    results.trim.orientation = trim[2] || 'top-left';
+    results.trim.tolerance = trim[4] && parseInt(trim[4], 10) || 0;
+    url.replace(trim[0], '');
+  }
 
   var crop = url.match(cropRegexp);
-  if (crop && crop[0]) url = url.replace(crop[0], '');
+  if (crop) {
+    results.crop.left = parseInt(crop[1], 10);
+    results.crop.top = parseInt(crop[2], 10);
+    results.crop.right = parseInt(crop[3], 10);
+    results.crop.bottom = parseInt(crop[4], 10);
+    url = url.replace(crop[0], '');
+  }
 
   var size = url.match(sizeRegexp);
-  if (size && size[0]) url = url.replace(size[0], '');
+  if (size) {
+    results.horizontalFlip = !!size[1];
+    if (size[2]) results.width = Math.abs(parseInt(size[2], 10));
+    results.verticalFlip = !!size[3];
+    if (size[4]) results.height = Math.abs(parseInt(size[4], 10));
+    url = url.replace(size[0], '');
+  }
 
   var halign = url.match(halignRegexp);
-  if (halign && halign[0]) url = url.replace(halign[0], '');
+  if (halign && halign[0]) {
+    results.halign = halign[1];
+    url = url.replace(halign[0], '');
+  }
 
   var valign = url.match(valignRegexp);
-  if (valign && valign[0]) url = url.replace(valign[0], '');
+  if (valign && valign[0]) {
+    results.valign = valign[1];
+    url = url.replace(valign[0], '');
+  }
 
-  var meta = url.indexOf('meta/') !== -1;
-  var smart = url.indexOf('smart/') !== -1;
-  var fitIn = url.indexOf('fit-in/') !== -1;
+  results.meta = url.indexOf('meta/') !== -1;
+  results.smart = url.indexOf('smart/') !== -1;
+  results.fitIn = url.indexOf('fit-in/') !== -1;
   url = url.replace(keywordsRegexp, '');
 
   var filters = url.match(filtersRegexp);
-  if (filters && filters[0]) url = url.replace(filters[0], '');
+  if (filters) {
+    results.filters = filters[1];
+    url = url.replace(filters[0], '');
+  }
 
-  return {
-    image: url,
-    crop: {
-      left: (crop && parseInt(crop[1], 10)) || null,
-      top: (crop && parseInt(crop[2], 10)) || null,
-      right: (crop && parseInt(crop[3], 10)) || null,
-      bottom: (crop && parseInt(crop[4], 10)) || null
-    },
-    width: (size && size[2] && Math.abs(parseInt(size[2], 10))) || null,
-    height: (size && size[4] && Math.abs(parseInt(size[4], 10))) || null,
-    meta: meta,
-    horizontalFlip: size && (size[1] === '-'),
-    verticalFlip: size && (size[3] === '-'),
-    halign: (halign && halign[1]) || 'left',
-    valign: (valign && valign[1]) || 'top',
-    smart: smart,
-    fitIn: fitIn,
-    filters: (filters && filters[1]) || null,
-    trim: {
-      orientation: (trim && (trim[2] || 'top-left')) || null,
-      tolerance: trim ? parseInt(trim[4], 10) || 0 : null
-    }
-  };
+  results.image = url;
+
+  return results;
 };
