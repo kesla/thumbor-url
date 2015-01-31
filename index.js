@@ -4,7 +4,7 @@ var cropRegexp = /(\d+)x(\d+):(\d+)x(\d+)\//;
 var sizeRegexp = /(\-?)(\d*)x(\-?)(\d*)\//;
 var halignRegexp = /(left|right|center)\//;
 var valignRegexp = /(top|bottom|middle)\//;
-var keywordsRegexp = /meta\/|smart\/fit-it\//g;
+var keywordsRegexp = /meta\/|smart\/|fit-in\//g;
 var filtersRegexp = /filters:(.+)\//;
 
 module.exports.parseDecrypted = function (url) {
