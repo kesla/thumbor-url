@@ -22,7 +22,7 @@ var regexp = new RegExp([
   '(smart/)?',
   // TODO:
   // filters
-
+  '(filters\:(.+?\\))\\/)?',
   // image
   '(\.+)?'
 ].join(''));
@@ -111,6 +111,12 @@ module.exports.parseDecrypted = function(url) {
     results.smart = true;
   }
   index++;
+
+  if (match[index]) {
+    results.filters = match[index + 1];
+  }
+
+  index = index + 2;
 
   results.image = match[index];
 
