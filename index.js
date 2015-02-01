@@ -7,7 +7,7 @@ var regexp = new RegExp([
   // meta
   '(meta/)?',
   // trim
-  '(trim(:([^\\d]+))?(:(\\d+))?/)?',
+  '(trim(:(top-left|bottom-right))?(:(\\d+))?/)?',
   // crop
   '((\\d+)x(\\d+):(\\d+)x(\\d+)/)?',
   // fit-in
