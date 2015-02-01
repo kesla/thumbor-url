@@ -26,7 +26,6 @@ var regexp = new RegExp([
   // image
   '(\.+)?'
 ].join(''));
-var assert = require('assert');
 
 module.exports.parseDecrypted = function(url) {
   var results = {
@@ -120,8 +119,6 @@ module.exports.parseDecrypted = function(url) {
   index = index + 2;
 
   results.image = match[index];
-
-  assert(results.image, '.image is required');
 
   return results;
 };
