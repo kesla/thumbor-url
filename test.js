@@ -5,9 +5,9 @@ var test = require('tape');
 var url = require('./');
 
 test('without result', function(t) {
-  var object = url.parseDecrypted("some fake url");
+  var object = url.parseDecrypted('some fake url');
 
-  t.equal(object.image, "some fake url");
+  t.equal(object.image, 'some fake url');
   t.end();
 });
 
@@ -27,7 +27,10 @@ test('without image', function(t) {
   t.equal(object.valign, 'top', 'valign');
   t.ok(object.smart, 'smart');
   t.ok(object.fitIn, 'fitInt');
-  t.equal(object.filters, 'some_filter()', 'filters');
+  t.deepEqual(object.filters, [{
+    name: 'some_filter',
+    args: []
+  }], 'filters');
   t.end();
 });
 
@@ -44,7 +47,10 @@ test('with url in filter', function(t) {
     '/filters:watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0)/img');
 
   t.equal(object.image, 'img');
-  t.equal(object.filters, 'watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0)');
+  t.deepEqual(object.filters, [{
+    name: 'watermark',
+    args: ['s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg', '0', '0', '0']
+  }]);
   t.end();
 });
 
@@ -53,7 +59,16 @@ test('with multiple filters', function(t) {
     '/filters:watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0):brightness(-50):grayscale()/img');
 
   t.equal(object.image, 'img');
-  t.equal(object.filters, 'watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0):brightness(-50):grayscale()');
+  t.deepEqual(object.filters, [{
+    args: ['s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg', '0', '0', '0'],
+    name: 'watermark'
+    }, {
+    args: ['-50'],
+    name: 'brightness'
+    }, {
+    args: [],
+    name: 'grayscale'
+  }]);
   t.end();
 });
 
@@ -72,7 +87,13 @@ test('with thumbor of thumbor with Filters', function(t) {
     '/90x100/filters:brightness(-50):contrast(20)/my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
 
   t.equal(object.image, 'my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
-  t.equal(object.filters, 'brightness(-50):contrast(20)');
+  t.deepEqual(object.filters, [{
+    args: ['-50'],
+    name: 'brightness'
+    }, {
+    args: ['20'],
+    name: 'contrast'
+  }]);
   t.equal(object.width, 90);
   t.equal(object.height, 100);
   t.end();

@@ -20,12 +20,12 @@ var regexp = new RegExp([
   '((top|bottom|middle)/)?',
   // smart
   '(smart/)?',
-  // TODO:
   // filters
   '(filters\:(.+?\\))\\/)?',
   // image
   '(\.+)?'
 ].join(''));
+var filterRegexp = /(.+)\((.*)\)/;
 var assert = require('assert');
 
 module.exports.parseDecrypted = function(url) {
@@ -114,7 +114,7 @@ module.exports.parseDecrypted = function(url) {
   index++;
 
   if (match[index]) {
-    results.filters = match[index + 1];
+    results.filters = parseFilters(match[index + 1]);
   }
 
   index = index + 2;
@@ -125,3 +125,13 @@ module.exports.parseDecrypted = function(url) {
 
   return results;
 };
+
+function parseFilters(filters) {
+  return filters.split(':').map(function(filter) {
+    var match = filter.match(filterRegexp);
+    return {
+      name: match[1],
+      args: match[2].split(',').filter(Boolean)
+    };
+  });
+}
