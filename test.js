@@ -79,47 +79,47 @@ test('with thumbor of thumbor with Filters', function(t) {
 });
 
 test('with only width / height dimensions', function(t) {
-  t.equal(url.parseDecrypted('/100x/').height, null);
-  t.equal(url.parseDecrypted('/100x/').width, 100);
-  t.equal(url.parseDecrypted('/x100/').height, 100);
-  t.equal(url.parseDecrypted('/x100/').width, null);
+  t.equal(url.parseDecrypted('/100x/http://example.jpg').height, null);
+  t.equal(url.parseDecrypted('/100x/http://example.jpg').width, 100);
+  t.equal(url.parseDecrypted('/x100/http://example.jpg').height, 100);
+  t.equal(url.parseDecrypted('/x100/http://example.jpg').width, null);
   t.end();
 });
 
 test('with halign / valign', function(t) {
-  t.equal(url.parseDecrypted('//').halign, 'left');
-  t.equal(url.parseDecrypted('/left/').halign, 'left');
-  t.equal(url.parseDecrypted('/right/').halign, 'right');
-  t.equal(url.parseDecrypted('/center/').halign, 'center');
-  t.equal(url.parseDecrypted('//').valign, 'top');
-  t.equal(url.parseDecrypted('/top/').valign, 'top');
-  t.equal(url.parseDecrypted('/bottom/').valign, 'bottom');
-  t.equal(url.parseDecrypted('/middle/').valign, 'middle');
+  t.equal(url.parseDecrypted('//http://example.jpg').halign, 'left');
+  t.equal(url.parseDecrypted('/left/http://example.jpg').halign, 'left');
+  t.equal(url.parseDecrypted('/right/http://example.jpg').halign, 'right');
+  t.equal(url.parseDecrypted('/center/http://example.jpg').halign, 'center');
+  t.equal(url.parseDecrypted('//http://example.jpg').valign, 'top');
+  t.equal(url.parseDecrypted('/top/http://example.jpg').valign, 'top');
+  t.equal(url.parseDecrypted('/bottom/http://example.jpg').valign, 'bottom');
+  t.equal(url.parseDecrypted('/middle/http://example.jpg').valign, 'middle');
   t.end();
 });
 
 test('trim', function(t) {
-  t.deepEqual(url.parseDecrypted('/trim/').trim, {
+  t.deepEqual(url.parseDecrypted('/trim/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 0
   });
-  t.deepEqual(url.parseDecrypted('/trim:top-left/').trim, {
+  t.deepEqual(url.parseDecrypted('/trim:top-left/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 0
   });
-  t.deepEqual(url.parseDecrypted('/trim:bottom-right/').trim, {
+  t.deepEqual(url.parseDecrypted('/trim:bottom-right/http://example.jpg').trim, {
     orientation: 'bottom-right',
     tolerance: 0
   });
-  t.deepEqual(url.parseDecrypted('/trim:123/').trim, {
+  t.deepEqual(url.parseDecrypted('/trim:123/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 123
   });
-  t.deepEqual(url.parseDecrypted('/trim:top-left:123/').trim, {
+  t.deepEqual(url.parseDecrypted('/trim:top-left:123/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 123
   });
-  t.deepEqual(url.parseDecrypted('/').trim, {
+  t.deepEqual(url.parseDecrypted('/http://example.jpg').trim, {
     orientation: null,
     tolerance: null
   });
