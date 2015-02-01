@@ -50,7 +50,7 @@ module.exports.parseDecrypted = function(url) {
       orientation: null,
       tolerance: null
     },
-    unsafe: true
+    unsafe: false
   };
 
   var match = url.match(regexp);
