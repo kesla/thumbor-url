@@ -146,3 +146,14 @@ test('trim', function(t) {
   });
   t.end();
 });
+
+test('unsafe / hash', function(t) {
+  t.equal(url.parseDecrypted('/url/').unsafe, false);
+  t.equal(url.parseDecrypted('/url/').hash, null);
+  t.equal(url.parseDecrypted('/unsafe/url/').unsafe, true);
+  t.equal(url.parseDecrypted('/abcdefabcdefabcdefabcdefabcd/url/').hash, 'abcdefabcdefabcdefabcdefabcd');
+  t.equal(url.parseDecrypted('/abcdefefghijklmnopqrstuvwx-_/url/').hash, 'abcdefefghijklmnopqrstuvwx-_');
+  t.equal(url.parseDecrypted('/aaaaaaaaaaaaaaaaaaaaaaaaaa==/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa==');
+  t.equal(url.parseDecrypted('/abc/').hash, null);
+  t.end();
+});

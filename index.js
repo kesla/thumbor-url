@@ -3,7 +3,7 @@
 var regexp = new RegExp([
   '/?',
   // unsafe
-  '(unsafe/)?',
+  '((unsafe)|([A-Za-z0-9\-_=]{28,})\/)?',
   // meta
   '(meta/)?',
   // trim
@@ -28,7 +28,7 @@ var regexp = new RegExp([
 var filterRegexp = /(.+)\((.*)\)/;
 var assert = require('assert');
 
-module.exports.parseDecrypted = function(url) {
+module.exports.parseDecrypted = function(href) {
   var results = {
     image: '',
     crop: {
@@ -51,16 +51,24 @@ module.exports.parseDecrypted = function(url) {
       orientation: null,
       tolerance: null
     },
-    unsafe: false
+    unsafe: false,
+    hash: null,
+    href: href
   };
 
-  var match = url.match(regexp);
+  var match = href.match(regexp);
   var index = 1;
 
-  if (match[index]) {
-    results.unsafe = true;
+  if (match[index]){
+    if (match[index + 1] === 'unsafe') {
+      results.unsafe = true;
+    } else {
+      results.hash = match[index + 2];
+    }
   }
-  index++;
+
+
+  index = index + 3;
 
   if (match[index]) {
     results.meta = true;
