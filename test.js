@@ -5,14 +5,14 @@ var test = require('tape');
 var url = require('./');
 
 test('without result', function(t) {
-  var object = url.parseDecrypted('some fake url');
+  var object = url.parse('some fake url');
 
   t.equal(object.image, 'some fake url');
   t.end();
 });
 
 test('without image', function(t) {
-  var object = url.parseDecrypted('/meta/10x11:12x13/fit-in/-300x-200/left/top/smart/filters:some_filter()/img');
+  var object = url.parse('/meta/10x11:12x13/fit-in/-300x-200/left/top/smart/filters:some_filter()/img');
 
   t.ok(object.meta, 'meta');
   t.equal(object.crop.left, 10, 'crop.left');
@@ -36,14 +36,14 @@ test('without image', function(t) {
 
 test('with image', function(t) {
   var imageUrl = 's.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg';
-  var object = url.parseDecrypted('/meta/10x11:12x13/-300x-200/left/top/smart/' + imageUrl);
+  var object = url.parse('/meta/10x11:12x13/-300x-200/left/top/smart/' + imageUrl);
 
   t.equal(object.image, imageUrl);
   t.end();
 });
 
 test('with url in filter', function(t) {
-  var object = url.parseDecrypted(
+  var object = url.parse(
     '/filters:watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0)/img');
 
   t.equal(object.image, 'img');
@@ -55,7 +55,7 @@ test('with url in filter', function(t) {
 });
 
 test('with multiple filters', function(t) {
-  var object = url.parseDecrypted(
+  var object = url.parse(
     '/filters:watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0):brightness(-50):grayscale()/img');
 
   t.equal(object.image, 'img');
@@ -73,7 +73,7 @@ test('with multiple filters', function(t) {
 });
 
 test('with thumbor of thumbor', function(t) {
-  var object = url.parseDecrypted(
+  var object = url.parse(
     '/90x100/my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
 
   t.equal(object.image, 'my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
@@ -83,7 +83,7 @@ test('with thumbor of thumbor', function(t) {
 });
 
 test('with thumbor of thumbor with Filters', function(t) {
-  var object = url.parseDecrypted(
+  var object = url.parse(
     '/90x100/filters:brightness(-50):contrast(20)/my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
 
   t.equal(object.image, 'my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
@@ -100,47 +100,47 @@ test('with thumbor of thumbor with Filters', function(t) {
 });
 
 test('with only width / height dimensions', function(t) {
-  t.equal(url.parseDecrypted('/100x/http://example.jpg').height, null);
-  t.equal(url.parseDecrypted('/100x/http://example.jpg').width, 100);
-  t.equal(url.parseDecrypted('/x100/http://example.jpg').height, 100);
-  t.equal(url.parseDecrypted('/x100/http://example.jpg').width, null);
+  t.equal(url.parse('/100x/http://example.jpg').height, null);
+  t.equal(url.parse('/100x/http://example.jpg').width, 100);
+  t.equal(url.parse('/x100/http://example.jpg').height, 100);
+  t.equal(url.parse('/x100/http://example.jpg').width, null);
   t.end();
 });
 
 test('with halign / valign', function(t) {
-  t.equal(url.parseDecrypted('//http://example.jpg').halign, 'left');
-  t.equal(url.parseDecrypted('/left/http://example.jpg').halign, 'left');
-  t.equal(url.parseDecrypted('/right/http://example.jpg').halign, 'right');
-  t.equal(url.parseDecrypted('/center/http://example.jpg').halign, 'center');
-  t.equal(url.parseDecrypted('//http://example.jpg').valign, 'top');
-  t.equal(url.parseDecrypted('/top/http://example.jpg').valign, 'top');
-  t.equal(url.parseDecrypted('/bottom/http://example.jpg').valign, 'bottom');
-  t.equal(url.parseDecrypted('/middle/http://example.jpg').valign, 'middle');
+  t.equal(url.parse('//http://example.jpg').halign, 'left');
+  t.equal(url.parse('/left/http://example.jpg').halign, 'left');
+  t.equal(url.parse('/right/http://example.jpg').halign, 'right');
+  t.equal(url.parse('/center/http://example.jpg').halign, 'center');
+  t.equal(url.parse('//http://example.jpg').valign, 'top');
+  t.equal(url.parse('/top/http://example.jpg').valign, 'top');
+  t.equal(url.parse('/bottom/http://example.jpg').valign, 'bottom');
+  t.equal(url.parse('/middle/http://example.jpg').valign, 'middle');
   t.end();
 });
 
 test('trim', function(t) {
-  t.deepEqual(url.parseDecrypted('/trim/http://example.jpg').trim, {
+  t.deepEqual(url.parse('/trim/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 0
   });
-  t.deepEqual(url.parseDecrypted('/trim:top-left/http://example.jpg').trim, {
+  t.deepEqual(url.parse('/trim:top-left/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 0
   });
-  t.deepEqual(url.parseDecrypted('/trim:bottom-right/http://example.jpg').trim, {
+  t.deepEqual(url.parse('/trim:bottom-right/http://example.jpg').trim, {
     orientation: 'bottom-right',
     tolerance: 0
   });
-  t.deepEqual(url.parseDecrypted('/trim:123/http://example.jpg').trim, {
+  t.deepEqual(url.parse('/trim:123/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 123
   });
-  t.deepEqual(url.parseDecrypted('/trim:top-left:123/http://example.jpg').trim, {
+  t.deepEqual(url.parse('/trim:top-left:123/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 123
   });
-  t.deepEqual(url.parseDecrypted('/http://example.jpg').trim, {
+  t.deepEqual(url.parse('/http://example.jpg').trim, {
     orientation: null,
     tolerance: null
   });
@@ -148,12 +148,12 @@ test('trim', function(t) {
 });
 
 test('unsafe / hash', function(t) {
-  t.equal(url.parseDecrypted('/url/').unsafe, false);
-  t.equal(url.parseDecrypted('/url/').hash, null);
-  t.equal(url.parseDecrypted('/unsafe/url/').unsafe, true);
-  t.equal(url.parseDecrypted('/abcdefabcdefabcdefabcdefabcd/url/').hash, 'abcdefabcdefabcdefabcdefabcd');
-  t.equal(url.parseDecrypted('/abcdefefghijklmnopqrstuvwx-_/url/').hash, 'abcdefefghijklmnopqrstuvwx-_');
-  t.equal(url.parseDecrypted('/aaaaaaaaaaaaaaaaaaaaaaaaaa==/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa==');
-  t.equal(url.parseDecrypted('/abc/').hash, null);
+  t.equal(url.parse('/url/').unsafe, false);
+  t.equal(url.parse('/url/').hash, null);
+  t.equal(url.parse('/unsafe/url/').unsafe, true);
+  t.equal(url.parse('/abcdefabcdefabcdefabcdefabcd/url/').hash, 'abcdefabcdefabcdefabcdefabcd');
+  t.equal(url.parse('/abcdefefghijklmnopqrstuvwx-_/url/').hash, 'abcdefefghijklmnopqrstuvwx-_');
+  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaa==/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa==');
+  t.equal(url.parse('/abc/').hash, null);
   t.end();
 });

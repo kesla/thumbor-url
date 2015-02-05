@@ -28,7 +28,7 @@ var regexp = new RegExp([
 var filterRegexp = /(.+)\((.*)\)/;
 var assert = require('assert');
 
-module.exports.parseDecrypted = function(href) {
+module.exports.parse = function(href) {
   var results = {
     image: '',
     crop: {
