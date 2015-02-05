@@ -2,16 +2,16 @@
 // https://github.com/thumbor/thumbor/blob/9d0e861145d15a50e6ac7800e9333d5d5149ccbd/vows/url_vows.py
 
 var test = require('tape');
-var url = require('./');
+var url = require('../');
 
-test('without result', function(t) {
+test('parse() without result', function(t) {
   var object = url.parse('some fake url');
 
   t.equal(object.image, 'some fake url');
   t.end();
 });
 
-test('without image', function(t) {
+test('parse() without image', function(t) {
   var object = url.parse('/meta/10x11:12x13/fit-in/-300x-200/left/top/smart/filters:some_filter()/img');
 
   t.ok(object.meta, 'meta');
@@ -34,7 +34,7 @@ test('without image', function(t) {
   t.end();
 });
 
-test('with image', function(t) {
+test('parse() with image', function(t) {
   var imageUrl = 's.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg';
   var object = url.parse('/meta/10x11:12x13/-300x-200/left/top/smart/' + imageUrl);
 
@@ -42,7 +42,7 @@ test('with image', function(t) {
   t.end();
 });
 
-test('with url in filter', function(t) {
+test('parse() with url in filter', function(t) {
   var object = url.parse(
     '/filters:watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0)/img');
 
@@ -54,7 +54,7 @@ test('with url in filter', function(t) {
   t.end();
 });
 
-test('with multiple filters', function(t) {
+test('parse() with multiple filters', function(t) {
   var object = url.parse(
     '/filters:watermark(s.glbimg.com/es/ge/f/original/2011/03/29/orlandosilva_60.jpg,0,0,0):brightness(-50):grayscale()/img');
 
@@ -72,7 +72,7 @@ test('with multiple filters', function(t) {
   t.end();
 });
 
-test('with thumbor of thumbor', function(t) {
+test('parse() with thumbor of thumbor', function(t) {
   var object = url.parse(
     '/90x100/my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
 
@@ -82,7 +82,7 @@ test('with thumbor of thumbor', function(t) {
   t.end();
 });
 
-test('with thumbor of thumbor with Filters', function(t) {
+test('parse() with thumbor of thumbor with Filters', function(t) {
   var object = url.parse(
     '/90x100/filters:brightness(-50):contrast(20)/my.image.path/unsafe/filters:watermark(s.glbimg.com/some/image.jpg,0,0,0)/some.domain/img/path/img.jpg');
 
@@ -99,7 +99,7 @@ test('with thumbor of thumbor with Filters', function(t) {
   t.end();
 });
 
-test('with only width / height dimensions', function(t) {
+test('parse() with only width / height dimensions', function(t) {
   t.equal(url.parse('/100x/http://example.jpg').height, null);
   t.equal(url.parse('/100x/http://example.jpg').width, 100);
   t.equal(url.parse('/x100/http://example.jpg').height, 100);
@@ -107,7 +107,7 @@ test('with only width / height dimensions', function(t) {
   t.end();
 });
 
-test('with halign / valign', function(t) {
+test('parse() with halign / valign', function(t) {
   t.equal(url.parse('//http://example.jpg').halign, 'left');
   t.equal(url.parse('/left/http://example.jpg').halign, 'left');
   t.equal(url.parse('/right/http://example.jpg').halign, 'right');
@@ -119,7 +119,7 @@ test('with halign / valign', function(t) {
   t.end();
 });
 
-test('trim', function(t) {
+test('parse() trim', function(t) {
   t.deepEqual(url.parse('/trim/http://example.jpg').trim, {
     orientation: 'top-left',
     tolerance: 0
@@ -147,7 +147,7 @@ test('trim', function(t) {
   t.end();
 });
 
-test('unsafe / hash', function(t) {
+test('parse() unsafe / hash', function(t) {
   t.equal(url.parse('/url/').unsafe, false);
   t.equal(url.parse('/url/').hash, null);
   t.equal(url.parse('/unsafe/url/').unsafe, true);
