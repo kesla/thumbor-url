@@ -153,7 +153,13 @@ test('parse() unsafe / hash', function(t) {
   t.equal(url.parse('/unsafe/url/').unsafe, true);
   t.equal(url.parse('/abcdefabcdefabcdefabcdefabcd/url/').hash, 'abcdefabcdefabcdefabcdefabcd');
   t.equal(url.parse('/abcdefefghijklmnopqrstuvwx-_/url/').hash, 'abcdefefghijklmnopqrstuvwx-_');
-  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaa==/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa==');
+  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaa==/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa');
+  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaa=/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa');
+  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaa/url/').hash, 'aaaaaaaaaaaaaaaaaaaaaaaaaa');
+  t.equal(url.parse('/aaaaaaaaaaaaaa=aaaaaaaaaaaa/url/').hash, null);
+  // too long
+  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaaaa=/url/').hash, null);
+  t.equal(url.parse('/aaaaaaaaaaaaaaaaaaaaaaaaaaa==/url/').hash, null);
   t.equal(url.parse('/abc/').hash, null);
   t.end();
 });
