@@ -163,3 +163,13 @@ test('parse() unsafe / hash', function(t) {
   t.equal(url.parse('/abc/').hash, null);
   t.end();
 });
+
+
+test('regression', function(t) {
+  var parsed = url.parse('unsafe/200x200/smart/http://s3.amazonaws.com/policymic-images/filename2.jpg');
+
+  t.equal(parsed.width, 200);
+  t.equal(parsed.height, 200);
+  t.equal(parsed.image, 'http://s3.amazonaws.com/policymic-images/filename2.jpg');
+  t.end();
+});
