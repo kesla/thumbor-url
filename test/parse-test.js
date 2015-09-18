@@ -108,11 +108,11 @@ test('parse() with only width / height dimensions', function(t) {
 });
 
 test('parse() with halign / valign', function(t) {
-  t.equal(url.parse('//http://example.jpg').halign, 'left');
+  t.equal(url.parse('//http://example.jpg').halign, null);
   t.equal(url.parse('/left/http://example.jpg').halign, 'left');
   t.equal(url.parse('/right/http://example.jpg').halign, 'right');
   t.equal(url.parse('/center/http://example.jpg').halign, 'center');
-  t.equal(url.parse('//http://example.jpg').valign, 'top');
+  t.equal(url.parse('//http://example.jpg').valign, null);
   t.equal(url.parse('/top/http://example.jpg').valign, 'top');
   t.equal(url.parse('/bottom/http://example.jpg').valign, 'bottom');
   t.equal(url.parse('/middle/http://example.jpg').valign, 'middle');
