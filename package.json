@@ -1,6 +1,6 @@
 {
   "name": "thumbor-url",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "parse thumbor urls",
   "main": "index.js",
   "scripts": {
